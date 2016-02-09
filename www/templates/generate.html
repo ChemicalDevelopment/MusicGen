@@ -21,6 +21,13 @@
 
                     <label class="item item-input item-select">
                         <div class="input-label">
+                            Waveform
+                        </div>
+                        <select ng-model="waveform" ng-change="updateWaveform(waveform)" ng-options="value as key for (key , value) in waveforms"></select>
+                    </label>
+
+                    <label class="item item-input item-select">
+                        <div class="input-label">
                             Octave
                         </div>
                         <select ng-model="selectedOctave" ng-change="updateOctave(selectedOctave)" ng-options="value for value in octaves"></select>

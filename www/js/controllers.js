@@ -79,7 +79,7 @@ angular.module('starter.controllers', [])
         var a = Math.pow(2, 1 / 12);
         $scope.selectedRange = 2;
         $scope.actualRange = $scope.selectedRange * 8;
-        var waveform = $scope.waveforms["sawtooth"];
+        $scope.waveform = $scope.waveforms["sine"];
         var chordType;
         var melodyType;
         var context;
@@ -185,25 +185,6 @@ angular.module('starter.controllers', [])
         }
 
 
-        function createButtons(context) {
-            var buttonDiv = document.createElement("div");
-            buttonDiv.className = "buttonDiv";
-            var begin = document.createElement("input");
-            begin.type = "button";
-            begin.value = "start";
-            begin.onclick = beginFunc;
-            begin.className = "button"
-            buttonDiv.appendChild(begin);
-
-            var end = document.createElement("input");
-            end.type = "button";
-            end.value = "end";
-            end.onclick = endFunc;
-            end.className = "button_end"
-            buttonDiv.appendChild(end);
-            context.appendChild(buttonDiv);
-        }
-
         var beginFunc = function() {
             if (!isRunning) {
                 init();
@@ -240,8 +221,8 @@ angular.module('starter.controllers', [])
             base = $scope.selectedKey * Math.pow(2, $scope.selectedOctave);
         }
         var updateWaveformType = function() {
-            chordType = waveform;
-            melodyType = waveform;
+            chordType = $scope.waveform;
+            melodyType = $scope.waveform;
         }
 
         //function checkBpmInput(ob) {
@@ -288,6 +269,10 @@ angular.module('starter.controllers', [])
             qtrNote = Math.floor(Math.pow(newTempo / 60 / 1000, -1));
             eigthNote = qtrNote / 2;
             minNote = eigthNote;
+            restart();
+        }
+        $scope.updateWaveform = function(newWaveform) {
+            $scope.waveform = newWaveform;
             restart();
         }
     })
