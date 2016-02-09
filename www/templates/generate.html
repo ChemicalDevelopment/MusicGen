@@ -1,0 +1,49 @@
+<ion-view view-title="POP MUSIC GEN">
+    <ion-content>
+        <div id="myContainer">
+
+                <div class="button-bar">
+                    <button class="button button-balanced" ng-click="start()">
+                        Start
+                    </button>
+                    <button class="button button-assertive" ng-click="end()">
+                        Stop
+                    </button>
+                </div>
+                <div class="list">
+
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Key
+                        </div>
+                        <select ng-model="selectedKey" ng-change="updateKey(selectedKey)" ng-options="value as key for (key , value) in keyValues"></select>
+                    </label>
+
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Octave
+                        </div>
+                        <select ng-model="selectedOctave" ng-change="updateOctave(selectedOctave)" ng-options="value for value in octaves"></select>
+                    </label>
+
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Range
+                        </div>
+                        <select ng-model="selectedRange" ng-change="updateRange(selectedRange)" ng-options="value for value in ranges"></select>
+                    </label>
+
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Tempo
+                        </div>
+                        <div class="item range range-positive tempoInputRange">
+                            <i class="icon ion-minus"></i>
+                            <input type="range" name="tempo" min="40" max="300" value="100" ng-model="selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="updateTempo(selectedTempo)">
+                            <i class="icon ion-plus"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+    </ion-content>
+</ion-view>
