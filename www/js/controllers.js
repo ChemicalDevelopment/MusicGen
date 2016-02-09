@@ -40,26 +40,31 @@ angular.module('starter.controllers', [])
         }, 1000);
     };
 })
-    
+
 
 .controller('AboutCtrl', function($scope) {
 })
 
-        .controller('GenerateCtrl', function($scope) {
-        $scope.keyValues = {
-            "C": 16.35,
-            "C#/Db": 17.32,
-            "D": 18.35,
-            "D#/Eb": 19.45,
-            "E": 20.6,
-            "F": 21.83,
-            "F#/Gb": 23.12,
-            "G": 24.5,
-            "G#/Ab": 25.96,
-            "A": 27.5,
-            "A#/Bb": 29.14,
-            "B": 30.87,
-        }
+.controller('GenerateCtrl', function($scope) {
+            /*
+            Used for buttons!
+            */
+
+
+            $scope.keyValues = {
+                "C": 16.35,
+                "C#/Db": 17.32,
+                "D": 18.35,
+                "D#/Eb": 19.45,
+                "E": 20.6,
+                "F": 21.83,
+                "F#/Gb": 23.12,
+                "G": 24.5,
+                "G#/Ab": 25.96,
+                "A": 27.5,
+                "A#/Bb": 29.14,
+                "B": 30.87,
+            }
         //this used to work differently. I am lazy.
         $scope.waveforms = {
             "sine": "sine",
@@ -73,13 +78,15 @@ angular.module('starter.controllers', [])
 
         //Configurations
         $scope.selectedOctave = 3;
+        $scope.selectedRange = 2;
         $scope.selectedKey = $scope.keyValues["A"];
+        $scope.waveform = $scope.waveforms["sine"];
+        $scope.actualRange = $scope.selectedRange * 8;
+        $scope.selectedTempo = 100;
+
         var base;
         //used with calculating notes
         var a = Math.pow(2, 1 / 12);
-        $scope.selectedRange = 2;
-        $scope.actualRange = $scope.selectedRange * 8;
-        $scope.waveform = $scope.waveforms["sine"];
         var chordType;
         var melodyType;
         var context;
@@ -90,7 +97,7 @@ angular.module('starter.controllers', [])
         var time;
         var melodyInt;
         var chor1, chor2, chor3, melody, chordGain, melodyGain;
-        var isRunning = false;
+        $scope.isRunning = false;
 
         //All browsers, hooray
         try {
@@ -158,10 +165,10 @@ angular.module('starter.controllers', [])
         //I   V    vi     IV
         //Standard Pop Progression
         chordProg = [
-            [0, 2, 4],
-            [4, 6, 8],
-            [5, 7, 9],
-            [3, 5, 7]
+        [0, 2, 4],
+        [4, 6, 8],
+        [5, 7, 9],
+        [3, 5, 7]
         ]
 
         //melody function
@@ -186,7 +193,7 @@ angular.module('starter.controllers', [])
 
 
         var beginFunc = function() {
-            if (!isRunning) {
+            if (!$scope.isRunning) {
                 init();
                 chord = 0;
                 step = 0;
@@ -198,7 +205,7 @@ angular.module('starter.controllers', [])
                 chor2.start(0);
                 chor3.start(0);
 
-                isRunning = true;
+                $scope.isRunning = true;
             } else {
                 endFunc();
                 beginFunc();
@@ -207,13 +214,13 @@ angular.module('starter.controllers', [])
 
         // Click to end the madness
         var endFunc = function() {
-            if (isRunning) {
+            if ($scope.isRunning) {
                 chor1.stop(0);
                 chor2.stop(0);
                 chor3.stop(0);
                 melody.stop(0);
                 clearInterval(melodyInt);
-                isRunning = false;
+                $scope.isRunning = false;
             }
         }
 
@@ -239,7 +246,7 @@ angular.module('starter.controllers', [])
         //}
 
         function restart() {
-            if (isRunning) {
+            if ($scope.isRunning) {
                 endFunc();
                 beginFunc();
             }
@@ -266,14 +273,26 @@ angular.module('starter.controllers', [])
 
         $scope.updateTempo = function (newTempo) {
           //  checkBpmInput(newTempo);
-            qtrNote = Math.floor(Math.pow(newTempo / 60 / 1000, -1));
-            eigthNote = qtrNote / 2;
-            minNote = eigthNote;
-            restart();
-        }
-        $scope.updateWaveform = function(newWaveform) {
-            $scope.waveform = newWaveform;
-            restart();
-        }
-    })
+          qtrNote = Math.floor(Math.pow(newTempo / 60 / 1000, -1));
+          eigthNote = qtrNote / 2;
+          minNote = eigthNote;
+          restart();
+      }
+      $scope.updateWaveform = function(newWaveform) {
+        $scope.waveform = newWaveform;
+        restart();
+    }
+    $scope.resetAll = function() {
+        $scope.selectedRange = 2;
+        $scope.selectedKey = $scope.keyValues["A"];
+        $scope.waveform = $scope.waveforms["sine"];
+        $scope.selectedOctave = 3;
+        $scope.actualRange = $scope.selectedRange * 8;
+        $scope.selectedTempo = 100;
+        $scope.updateTempo($scope.selectedTempo);
+        //$scope.$apply();
+
+        restart();
+    }
+})
 

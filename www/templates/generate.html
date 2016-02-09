@@ -3,11 +3,14 @@
         <div id="myContainer">
 
                 <div class="button-bar">
-                    <button class="button button-balanced" ng-click="start()">
+                    <button class="button button-balanced" ng-click="start()" ng-hide="isRunning">
                         Start
                     </button>
-                    <button class="button button-assertive" ng-click="end()">
+                    <button class="button button-assertive" ng-click="end()" ng-show="isRunning">
                         Stop
+                    </button>
+                    <button class="button button-energized" ng-click="resetAll()">
+                        Reset
                     </button>
                 </div>
                 <div class="list">
@@ -16,28 +19,28 @@
                         <div class="input-label">
                             Key
                         </div>
-                        <select ng-model="selectedKey" ng-change="updateKey(selectedKey)" ng-options="value as key for (key , value) in keyValues"></select>
+                        <select ng-model="$parent.selectedKey" ng-change="updateKey(selectedKey)" ng-options="value as key for (key , value) in keyValues"></select>
                     </label>
 
                     <label class="item item-input item-select">
                         <div class="input-label">
                             Waveform
                         </div>
-                        <select ng-model="waveform" ng-change="updateWaveform(waveform)" ng-options="value as key for (key , value) in waveforms"></select>
+                        <select ng-model="$parent.waveform" ng-change="updateWaveform(waveform)" ng-options="value as key for (key , value) in waveforms"></select>
                     </label>
 
                     <label class="item item-input item-select">
                         <div class="input-label">
                             Octave
                         </div>
-                        <select ng-model="selectedOctave" ng-change="updateOctave(selectedOctave)" ng-options="value for value in octaves"></select>
+                        <select ng-model="$parent.selectedOctave" ng-change="updateOctave(selectedOctave)" ng-options="value for value in octaves"></select>
                     </label>
 
                     <label class="item item-input item-select">
                         <div class="input-label">
                             Range
                         </div>
-                        <select ng-model="selectedRange" ng-change="updateRange(selectedRange)" ng-options="value for value in ranges"></select>
+                        <select ng-model="$parent.selectedRange" ng-change="updateRange(selectedRange)" ng-options="value for value in ranges"></select>
                     </label>
 
                     <label class="item item-input item-select">
@@ -46,7 +49,7 @@
                         </div>
                         <div class="item range range-positive tempoInputRange">
                             <i class="icon ion-minus"></i>
-                            <input type="range" name="tempo" min="40" max="300" value="100" ng-model="selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="updateTempo(selectedTempo)">
+                            <input type="range" name="tempo" min="40" max="160" ng-model="$parent.selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="updateTempo(selectedTempo)">
                             <i class="icon ion-plus"></i>
                         </div>
                     </label>
