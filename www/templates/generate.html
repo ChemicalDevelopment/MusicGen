@@ -43,14 +43,12 @@
                         <select ng-model="$parent.selectedRange" ng-change="updateRange(selectedRange)" ng-options="value for value in ranges"></select>
                     </label>
 
-                    <label class="item item-input item-select">
+                    <label class="item item-input-inset">
                         <div class="input-label">
                             Tempo
                         </div>
                         <div class="item range range-positive tempoInputRange">
-                            <i class="icon ion-minus"></i>
                             <input type="range" name="tempo" min="40" max="160" ng-model="$parent.selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="updateTempo(selectedTempo)">
-                            <i class="icon ion-plus"></i>
                         </div>
                     </label>
                 </div>
