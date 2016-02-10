@@ -58,12 +58,56 @@
                         Visualization
                     </div>
                     <select ng-model="$parent.visualSetting" ng-change="updateVisualization()">
+                        <option>off</option>
                         <option>sinewave</option>
                         <option>frequencybars</option>
-                        <option>off</option>
                     </select>
                 </label>
-                <canvas id="canv" width="512" height="128" style="width: 100%;"></canvas>
+                <div ng-hide="visualSetting == 'off'">
+                    <canvas id="canv" width="512" height="128" style="width: 100%;"></canvas>
+                    <ul class="list">
+
+                        <li class="item item-toggle">
+                            Melody
+                            <label class="toggle toggle-assertive">
+                                <input type="checkbox" ng-model="$parent.visualizeMelody" ng-change="updateVisualizationMelody()">
+                                <div class="track">
+                                    <div class="handle"></div>
+                                </div>
+                            </label>
+                        </li>
+
+                        <li class="item item-toggle">
+                            Chord 1
+                            <label class="toggle toggle-assertive">
+                                <input type="checkbox" ng-model="$parent.visualizeChor1" ng-change="updateVisualizationChor1()">
+                                <div class="track">
+                                    <div class="handle"></div>
+                                </div>
+                            </label>
+                        </li>
+
+                        <li class="item item-toggle">
+                            Chord 2
+                            <label class="toggle toggle-assertive">
+                                <input type="checkbox" ng-model="$parent.visualizeChor2" ng-change="updateVisualizationChor2()">
+                                <div class="track">
+                                    <div class="handle"></div>
+                                </div>
+                            </label>
+                        </li>
+
+                        <li class="item item-toggle">
+                            Chord 3
+                            <label class="toggle toggle-assertive">
+                                <input type="checkbox" ng-model="$parent.visualizeChor3" ng-change="updateVisualizationChor3()">
+                                <div class="track">
+                                    <div class="handle"></div>
+                                </div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </ion-content>

@@ -43,6 +43,11 @@ angular.module('starter.controllers', [])
     $scope.actualRange = $scope.selectedRange * 8;
     $scope.selectedTempo = 100;
 
+    $scope.visualizeChor1 = false;
+    $scope.visualizeChor2 = false;
+    $scope.visualizeChor3 = false;
+    $scope.visualizeMelody = true;
+
     var base;
     //used with calculating notes
     var a = Math.pow(2, 1 / 12);
@@ -66,7 +71,7 @@ angular.module('starter.controllers', [])
     }
 
 
-    $scope.visualSetting = "sinewave";
+    $scope.visualSetting = "off";
 
     var analyser = context.createAnalyser();
 
@@ -161,6 +166,7 @@ angular.module('starter.controllers', [])
             drawFrequencyBars();
 
         } else if (visualSetting == "off") {
+            drawVisual = null;
             canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
             canvasCtx.fillStyle = "black";
             canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -202,7 +208,14 @@ angular.module('starter.controllers', [])
         melodyGain.connect(context.destination);
 
         // connect the melody to the analyser for visualization
-        melody.connect(analyser);
+        //melody.connect(analyser);
+        //chor1.connect(analyser);
+        //chor2.connect(analyser);
+        //chor3.connect(analyser);
+        connectOrDisconnect(melody, $scope.visualizeMelody, true);
+        connectOrDisconnect(chor1, $scope.visualizeChor1, true);
+        connectOrDisconnect(chor2, $scope.visualizeChor2, true);
+        connectOrDisconnect(chor3, $scope.visualizeChor3, true);
 
         //Set type of wave for chord
         chor1.type = chordType;
@@ -341,9 +354,33 @@ angular.module('starter.controllers', [])
     }
 
     $scope.updateVisualization = function () {
+        if (drawVisual)
+            window.cancelAnimationFrame(drawVisual);
 
-        window.cancelAnimationFrame(drawVisual);
         visualize();
+    }
+    
+    $scope.updateVisualizationMelody = function () {
+        connectOrDisconnect(melody, $scope.visualizeMelody);
+    }
+    $scope.updateVisualizationChor1 = function () {
+        connectOrDisconnect(chor1, $scope.visualizeChor1);
+    }
+    $scope.updateVisualizationChor2 = function () {
+        connectOrDisconnect(chor2, $scope.visualizeChor2);
+    }
+    $scope.updateVisualizationChor3 = function () {
+        connectOrDisconnect(chor3, $scope.visualizeChor3);
+    }
+
+    function connectOrDisconnect(osc, con, init) {
+        if (osc) {
+            if (con) {
+                osc.connect(analyser);
+            } else if(!init) {
+                osc.disconnect(analyser);
+            }
+        }
     }
 
     $scope.resetAll = function () {
@@ -355,8 +392,12 @@ angular.module('starter.controllers', [])
         $scope.selectedTempo = 100;
         $scope.updateTempo($scope.selectedTempo);
 
-        $scope.visualSetting = 'sinewave';
+        $scope.visualSetting = 'off';
         $scope.updateVisualization();
+        $scope.visualizeChor1 = false;
+        $scope.visualizeChor2 = false;
+        $scope.visualizeChor3 = false;
+        $scope.visualizeMelody = true;
 
         restart();
     }
