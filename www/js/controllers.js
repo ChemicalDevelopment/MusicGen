@@ -91,9 +91,9 @@ angular.module('starter.controllers', [])
 
             canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-            function draw() {
+            function drawSine() {
 
-                drawVisual = requestAnimationFrame(draw);
+                drawVisual = requestAnimationFrame(drawSine);
 
                 analyser.getByteTimeDomainData(dataArray);
 
@@ -111,7 +111,7 @@ angular.module('starter.controllers', [])
                 for (var i = 0; i < bufferLength; i++) {
 
                     var v = dataArray[i] / 128.0;
-                    var y = v * canvasHeight / 2;
+                    var y = v * canvasHeight/2;
 
                     if (i === 0) {
                         canvasCtx.moveTo(x, y);
@@ -126,7 +126,7 @@ angular.module('starter.controllers', [])
                 canvasCtx.stroke();
             };
 
-            draw();
+            drawSine();
 
         } else if (visualSetting == "frequencybars") {
             analyser.fftSize = 256;
@@ -136,8 +136,8 @@ angular.module('starter.controllers', [])
 
             canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-            function draw() {
-                drawVisual = requestAnimationFrame(draw);
+            function drawFrequencyBars() {
+                drawVisual = requestAnimationFrame(drawFrequencyBars);
 
                 analyser.getByteFrequencyData(dataArray);
 
@@ -158,7 +158,7 @@ angular.module('starter.controllers', [])
                 }
             };
 
-            draw();
+            drawFrequencyBars();
 
         } else if (visualSetting == "off") {
             canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
