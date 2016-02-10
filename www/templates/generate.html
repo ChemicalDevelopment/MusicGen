@@ -52,6 +52,19 @@
                     </div>
                 </label>
             </div>
+            <div>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Visualization
+                    </div>
+                    <select ng-model="$parent.visualSetting" ng-change="updateVisualization()">
+                        <option>sinewave</option>
+                        <option>frequencybars</option>
+                        <option>off</option>
+                    </select>
+                </label>
+                <canvas id="canv" width="2000" height="140" style="width: 100%;"></canvas>
+            </div>
         </div>
     </ion-content>
 </ion-view>

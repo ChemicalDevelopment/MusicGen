@@ -65,6 +65,113 @@ angular.module('starter.controllers', [])
         context = new webkitAudioContext();
     }
 
+
+    $scope.visualSetting = "sinewave";
+
+    var analyser = context.createAnalyser();
+
+    var canvas = document.getElementById('canv');
+    var canvasCtx = canv.getContext('2d');
+
+    function visualize() {
+        var canvasWidth = canvas.width;
+        var canvasHeight = canvas.height;
+        
+        // var visualSetting = visualSelect.value;
+        //var visualSetting = "sinewave";
+        var visualSetting = $scope.visualSetting;
+
+        console.log(visualSetting);
+
+        if (visualSetting == "sinewave") {
+            analyser.fftSize = 2048;
+            var bufferLength = analyser.fftSize;
+            console.log(bufferLength);
+            var dataArray = new Uint8Array(bufferLength);
+
+            canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            function draw() {
+
+                drawVisual = requestAnimationFrame(draw);
+
+                analyser.getByteTimeDomainData(dataArray);
+
+                canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+                canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                canvasCtx.lineWidth = 2;
+                canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+
+                canvasCtx.beginPath();
+
+                var sliceWidth = canvasWidth * 1.0 / bufferLength;
+                var x = 0;
+
+                for (var i = 0; i < bufferLength; i++) {
+
+                    var v = dataArray[i] / 128.0;
+                    var y = v * canvasHeight / 2;
+
+                    if (i === 0) {
+                        canvasCtx.moveTo(x, y);
+                    } else {
+                        canvasCtx.lineTo(x, y);
+                    }
+
+                    x += sliceWidth;
+                }
+
+                canvasCtx.lineTo(canvas.width, canvas.height / 2);
+                canvasCtx.stroke();
+            };
+
+            draw();
+
+        } else if (visualSetting == "frequencybars") {
+            analyser.fftSize = 256;
+            var bufferLength = analyser.frequencyBinCount;
+            console.log(bufferLength);
+            var dataArray = new Uint8Array(bufferLength);
+
+            canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            function draw() {
+                drawVisual = requestAnimationFrame(draw);
+
+                analyser.getByteFrequencyData(dataArray);
+
+                canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+                canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                var barWidth = (canvasWidth / bufferLength) * 2.5;
+                var barHeight;
+                var x = 0;
+
+                for (var i = 0; i < bufferLength; i++) {
+                    barHeight = dataArray[i];
+
+                    canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
+                    canvasCtx.fillRect(x, canvasHeight - barHeight / 2, barWidth, barHeight / 2);
+
+                    x += barWidth + 1;
+                }
+            };
+
+            draw();
+
+        } else if (visualSetting == "off") {
+            canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            canvasCtx.fillStyle = "black";
+            canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+    }
+    
+    visualize();
+    
+    
+
     //volume
     chordGain = context.createGain();
     melodyGain = context.createGain();
@@ -85,12 +192,17 @@ angular.module('starter.controllers', [])
         chor3 = context.createOscillator();
         melody = context.createOscillator();
 
+
+
         chor1.connect(chordGain);
         chor2.connect(chordGain);
         chor3.connect(chordGain);
         melody.connect(melodyGain);
         chordGain.connect(context.destination);
         melodyGain.connect(context.destination);
+
+        // connect the melody to the analyser for visualization
+        melody.connect(analyser);
 
         //Set type of wave for chord
         chor1.type = chordType;
@@ -227,6 +339,13 @@ angular.module('starter.controllers', [])
         $scope.waveform = newWaveform;
         restart();
     }
+
+    $scope.updateVisualization = function () {
+
+        window.cancelAnimationFrame(drawVisual);
+        visualize();
+    }
+
     $scope.resetAll = function () {
         $scope.selectedRange = 2;
         $scope.selectedKey = $scope.keyValues["A"];
@@ -235,6 +354,9 @@ angular.module('starter.controllers', [])
         $scope.actualRange = $scope.selectedRange * 8;
         $scope.selectedTempo = 100;
         $scope.updateTempo($scope.selectedTempo);
+
+        $scope.visualSetting = 'sinewave';
+        $scope.updateVisualization();
 
         restart();
     }
