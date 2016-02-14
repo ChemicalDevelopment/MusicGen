@@ -32,12 +32,72 @@ angular.module('starter.controllers', [])
         "triangle": "triangle",
     }
 
+    var triads = {
+        'I': [0, 2, 4],
+        'ii': [1, 3, 5],
+        'iii': [2, 4, 6],
+        'IV': [3, 5, 7],
+        'V': [4, 6, 8],
+        'vi': [5, 7, 9],
+        'vii': [6, 8, 10],
+    }
+
+    $scope.chordProgs = {
+        "Don't Stop Believing (I V vi IV)": [
+            triads['I'],
+            triads['V'],
+            triads['vi'],
+            triads['IV']
+        ],
+        'My Sweet Annette (ii IV I V)': [
+            triads['ii'],
+            triads['IV'],
+            triads['I'],
+            triads['V']
+        ],
+        "50's (I vi IV V)": [
+            triads['I'],
+            triads['vi'],
+            triads['IV'],
+            triads['V']
+        ],
+        'Canon (I V vi iii IV I IV V)': [
+            triads['I'],
+            triads['V'],
+            triads['vi'],
+            triads['iii'],
+            triads['IV'],
+            triads['I'],
+            triads['IV'],
+            triads['V']
+        ],
+        "Good Love (I IV V IV)": [
+            triads['I'],
+            triads['IV'],
+            triads['V'],
+            triads['IV']
+        ],
+        "Sweet Child (V V IV I)": [
+            triads['V'],
+            triads['V'],
+            triads['IV'],
+            triads['I']
+        ],
+        "Dream On (vi V IV V)": [
+            triads['vi'],
+            triads['V'],
+            triads['IV'],
+            triads['V']
+        ],
+    };
+
     $scope.octaves = [0, 1, 2, 3, 4, 5];
     $scope.ranges = [1, 2, 3, 4];
 
     //Configurations
     $scope.selectedOctave = 3;
     $scope.selectedRange = 2;
+    $scope.selectedChordProg = $scope.chordProgs["Don't Stop Believing (I V vi IV)"];
     $scope.selectedKey = $scope.keyValues["A"];
     $scope.waveform = $scope.waveforms["sine"];
     $scope.actualRange = $scope.selectedRange * 8;
@@ -226,9 +286,12 @@ angular.module('starter.controllers', [])
         melody.type = melodyType;
 
         melody.frequency.value = base;
-        chor1.frequency.value = notes[chordProg[0][0]];
-        chor2.frequency.value = notes[chordProg[0][1]];
-        chor3.frequency.value = notes[chordProg[0][2]];
+
+        var prog = $scope.selectedChordProg;
+
+        chor1.frequency.value = notes[prog[0][0]];
+        chor2.frequency.value = notes[prog[0][1]];
+        chor3.frequency.value = notes[prog[0][2]];
     }
 
     // Build scale
@@ -237,7 +300,7 @@ angular.module('starter.controllers', [])
         var freq = base;
         var step = 0;
         for (var i = 0; i < $scope.actualRange; i++) {
-            notes[i] = freq
+            notes[i] = freq;
             step++;
             if (i % 7 != 2 && i % 7 != 6) {
                 step++;
@@ -246,25 +309,17 @@ angular.module('starter.controllers', [])
         }
     }
 
-    //I   V    vi     IV
-    //Standard Pop Progression
-    chordProg = [
-    [0, 2, 4],
-    [4, 6, 8],
-    [5, 7, 9],
-    [3, 5, 7]
-    ]
-
     //melody function
     var melodyFun = function () {
+        var prog = $scope.selectedChordProg;
         time++;
         //chord progression    
         if (time % (notesPerMeasure * (qtrNote / minNote)) == 0 && time != 0) {
             chord++;
-            chord %= 4
-            chor1.frequency.value = notes[chordProg[chord][0]];
-            chor2.frequency.value = notes[chordProg[chord][1]];
-            chor3.frequency.value = notes[chordProg[chord][2]];
+            chord %= prog.length;
+            chor1.frequency.value = notes[prog[chord][0]];
+            chor2.frequency.value = notes[prog[chord][1]];
+            chor3.frequency.value = notes[prog[chord][2]];
         }
         //Random note length
         if (time % (Math.floor(Math.random() * (qtrNote / minNote))) == 0) {
@@ -330,6 +385,13 @@ angular.module('starter.controllers', [])
         $scope.selectedKey = newKey;
         restart();
     }
+
+    $scope.updateChordProgression = function (newProg) {
+        //hack - select isn't updating the selectedKey via ng-model.  Have to manually set it here
+        $scope.selectedChordProg = newProg;
+        restart();
+    }
+
     $scope.updateOctave = function (newOctave) {
         $scope.selectedOctave = newOctave;
         restart();

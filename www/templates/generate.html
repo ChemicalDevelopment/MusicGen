@@ -24,6 +24,13 @@
 
                 <label class="item item-input item-select">
                     <div class="input-label">
+                        Progression
+                    </div>
+                    <select ng-model="$parent.selectedChordProg" ng-change="updateChordProgression(selectedChordProg)" ng-options="value as key for (key , value) in chordProgs"></select>
+                </label>
+
+                <label class="item item-input item-select">
+                    <div class="input-label">
                         Waveform
                     </div>
                     <select ng-model="$parent.waveform" ng-change="updateWaveform(waveform)" ng-options="value as key for (key , value) in waveforms"></select>
