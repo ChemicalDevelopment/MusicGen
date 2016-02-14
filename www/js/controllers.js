@@ -96,6 +96,7 @@ angular.module('starter.controllers', [])
             triads['I'],
             triads['Imaj7']
         ],
+
     };
 
     $scope.octaves = [0, 1, 2, 3, 4, 5];
@@ -296,9 +297,10 @@ angular.module('starter.controllers', [])
 
         var prog = $scope.selectedChordProg;
 
-        chor1.frequency.value = notes[prog[0][0]];
-        chor2.frequency.value = notes[prog[0][1]];
-        chor3.frequency.value = notes[prog[0][2]];
+        var ar = $scope.actualRange;
+        chor1.frequency.value = notes[prog[0][0] % ar];
+        chor2.frequency.value = notes[prog[0][1] % ar];
+        chor3.frequency.value = notes[prog[0][2] % ar];
     }
 
     // Build scale
