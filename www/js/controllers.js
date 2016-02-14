@@ -33,13 +33,14 @@ angular.module('starter.controllers', [])
     }
 
     var triads = {
-        'I': [0, 2, 4],
-        'ii': [1, 3, 5],
-        'iii': [2, 4, 6],
-        'IV': [3, 5, 7],
-        'V': [4, 6, 8],
-        'vi': [5, 7, 9],
-        'vii': [6, 8, 10],
+        'I': [0, 4, 7],
+        'ii': [2, 5, 9],
+        'iii': [4, 7, 11],
+        'IV': [5, 9, 12],
+        'V': [7, 11, 14],
+        'vi': [9, 12, 16],
+        'vii': [11, 14, 18],
+        'Imaj7': [0, 4, 11],
     }
 
     $scope.chordProgs = {
@@ -89,6 +90,12 @@ angular.module('starter.controllers', [])
             triads['IV'],
             triads['V']
         ],
+        "Jazz (ii V I Imaj7)": [
+            triads['ii'],
+            triads['V'],
+            triads['I'],
+            triads['Imaj7']
+        ],
     };
 
     $scope.octaves = [0, 1, 2, 3, 4, 5];
@@ -100,7 +107,7 @@ angular.module('starter.controllers', [])
     $scope.selectedChordProg = $scope.chordProgs["Don't Stop Believing (I V vi IV)"];
     $scope.selectedKey = $scope.keyValues["A"];
     $scope.waveform = $scope.waveforms["sine"];
-    $scope.actualRange = $scope.selectedRange * 8;
+    $scope.actualRange = $scope.selectedRange * 12;
     $scope.selectedTempo = 100;
 
     $scope.visualizeChor1 = false;
@@ -302,12 +309,16 @@ angular.module('starter.controllers', [])
         for (var i = 0; i < $scope.actualRange; i++) {
             notes[i] = freq;
             step++;
-            if (i % 7 != 2 && i % 7 != 6) {
-                step++;
-            }
+            //if (i % 7 != 2 && i % 7 != 6) {
+            //    step++;
+            //}
             freq = base * Math.pow(a, step);
         }
     }
+
+    var playInKey = true;
+    //var rest = false;
+    //    var restLastTime = false;
 
     //melody function
     var melodyFun = function () {
@@ -325,8 +336,41 @@ angular.module('starter.controllers', [])
         if (time % (Math.floor(Math.random() * (qtrNote / minNote))) == 0) {
             //random note 0 to range-1
             var note = Math.floor((Math.random() * ($scope.actualRange - 1)));
+
+            if (playInKey) {
+                var noteMod = note % 12;
+                if (noteMod === 1) {
+                    note--;
+                  //  rest = true;
+                }
+                else if (noteMod === 3) note++;
+                else if (noteMod === 6) note--;
+                else if (noteMod === 8) note++;
+                else if (noteMod === 10) note--;
+            }
+            //freq = rest ? 0 : notes[note];
             freq = notes[note];
+
+            //if (rest) {
+            //    melody.noteOff(0);
+            //} else {
+            //    melody.noteOn(0);
+            //}
+
+            //attack = 20;
+            //decay = 100;
+
+            //if (rest) {
+            //    melodyGain.gain.linearRampToValueAtTime(0, context.currentTime + decay/1000);
+            //} else if(restLastTime)
+            //    melodyGain.gain.linearRampToValueAtTime(0.1, context.currentTime + attack/1000);
+
+            //restLastTime = rest;
+            //rest = false;
+
+
             melody.frequency.value = freq;
+
         }
     }
 
@@ -399,7 +443,7 @@ angular.module('starter.controllers', [])
 
     $scope.updateRange = function (newRange) {
         $scope.seleectedRange = newRange;
-        $scope.actualRange = newRange * 8;
+        $scope.actualRange = newRange * 12;
         restart();
     }
 
@@ -450,7 +494,7 @@ angular.module('starter.controllers', [])
         $scope.selectedKey = $scope.keyValues["A"];
         $scope.waveform = $scope.waveforms["sine"];
         $scope.selectedOctave = 3;
-        $scope.actualRange = $scope.selectedRange * 8;
+        $scope.actualRange = $scope.selectedRange * 12;
         $scope.selectedTempo = 100;
         $scope.updateTempo($scope.selectedTempo);
 
