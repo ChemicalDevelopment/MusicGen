@@ -55,8 +55,10 @@
                         Tempo
                     </div>
                     <div class="item range range-positive tempoInputRange">
-                        <input type="range" name="tempo" min="40" max="160" ng-model="vm.selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="vm.updateTempo()">
+                        <input id="tempoInput" type="range" name="tempo" min="40" max="200" ng-model="vm.selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="vm.updateTempo()">
+                        <output name="tempoText" for="tempoInput">{{vm.selectedTempo}}</output>
                     </div>
+                    
                 </label>
             </div>
             <div>
