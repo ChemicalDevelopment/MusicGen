@@ -251,6 +251,7 @@ angular.module('starter.controllers', [])
     melodyGain = context.createGain();
     chordGain.gain.value = 0.05;
     melodyGain.gain.value = 0.1;
+    //melodyGain.gain.value = 0.0;
 
     //End Configurations
 
@@ -322,6 +323,9 @@ angular.module('starter.controllers', [])
     //var rest = false;
     //    var restLastTime = false;
 
+    var sus = false;
+        var changeSusOn = 0;
+
     //melody function
     var melodyFun = function () {
         var prog = $scope.selectedChordProg;
@@ -330,9 +334,25 @@ angular.module('starter.controllers', [])
         if (time % (notesPerMeasure * (qtrNote / minNote)) == 0 && time != 0) {
             chord++;
             chord %= prog.length;
-            chor1.frequency.value = notes[prog[chord][0]];
-            chor2.frequency.value = notes[prog[chord][1]];
-            chor3.frequency.value = notes[prog[chord][2]];
+            chor1.frequency.value = notes[prog[chord][0] % $scope.actualRange];
+
+            sus = getRandomBool();
+
+            if (sus) {
+                changeSusOn = time + getRandomInt(1,4);
+            } else {
+                chor2.frequency.value = notes[prog[chord][1] % $scope.actualRange];
+                changeSusOn = 0;
+            }
+            chor3.frequency.value = notes[prog[chord][2] % $scope.actualRange];
+           
+        } else if(sus && (changeSusOn == time)) {
+            if (sus) {
+                chor2.frequency.value = notes[prog[chord][1] % $scope.actualRange];
+
+                sus = false;
+                changeSusOn = 0;
+            }
         }
         //Random note length
         if (time % (Math.floor(Math.random() * (qtrNote / minNote))) == 0) {
@@ -349,10 +369,18 @@ angular.module('starter.controllers', [])
                 else if (noteMod === 10) note = prog[chord][2];
             }
 
-            freq = notes[note];
+            freq = notes[note % $scope.actualRange];
 
             melody.frequency.value = freq;
         }
+    }
+
+    function getRandomBool() {
+        return (Math.random() > .5);
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     var beginFunc = function () {
