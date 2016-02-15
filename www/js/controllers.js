@@ -154,13 +154,11 @@ angular.module('starter.controllers', [])
         var canvasWidth = canvas.width;
         var canvasHeight = canvas.height;
         
-        // var visualSetting = visualSelect.value;
-        //var visualSetting = "sinewave";
         var visualSetting = $scope.visualSetting;
 
         console.log(visualSetting);
 
-        if (visualSetting == "sinewave") {
+        if (visualSetting == "wave") {
             analyser.fftSize = 2048;
             var bufferLength = analyser.fftSize;
             console.log(bufferLength);
@@ -168,17 +166,17 @@ angular.module('starter.controllers', [])
 
             canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-            function drawSine() {
+            function drawWave() {
 
-                drawVisual = requestAnimationFrame(drawSine);
+                drawVisual = requestAnimationFrame(drawWave);
 
                 analyser.getByteTimeDomainData(dataArray);
 
-                canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+                canvasCtx.fillStyle = 'rgb(0, 0, 0)';
                 canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
                 canvasCtx.lineWidth = 2;
-                canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+                canvasCtx.strokeStyle = 'rgb(255,0,0)';
 
                 canvasCtx.beginPath();
 
@@ -203,9 +201,9 @@ angular.module('starter.controllers', [])
                 canvasCtx.stroke();
             };
 
-            drawSine();
+            drawWave();
 
-        } else if (visualSetting == "frequencybars") {
+        } else if (visualSetting == "bars") {
             analyser.fftSize = 256;
             var bufferLength = analyser.frequencyBinCount;
             console.log(bufferLength);
