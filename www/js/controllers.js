@@ -44,25 +44,25 @@ angular.module('starter.controllers', [])
     }
 
     $scope.chordProgs = {
-        "Believing (I V vi IV)": [
+        "Believing (I-V-vi-IV)": [
             triads['I'],
             triads['V'],
             triads['vi'],
             triads['IV']
         ],
-        'Annette (ii IV I V)': [
+        'Annette (ii-IV-I-V)': [
             triads['ii'],
             triads['IV'],
             triads['I'],
             triads['V']
         ],
-        "50's (I vi IV V)": [
+        "50's (I-vi-IV-V)": [
             triads['I'],
             triads['vi'],
             triads['IV'],
             triads['V']
         ],
-        'Canon (I V vi iii IV I IV V)': [
+        'Canon (I-V-vi-iii-IV-I-IV-V)': [
             triads['I'],
             triads['V'],
             triads['vi'],
@@ -72,25 +72,29 @@ angular.module('starter.controllers', [])
             triads['IV'],
             triads['V']
         ],
-        "Good Love (I IV V IV)": [
+        "Good Love (I-IV-V-IV)": [
             triads['I'],
             triads['IV'],
             triads['V'],
             triads['IV']
         ],
-        "Sweet Child (V V IV I)": [
+        "Sweet Child (V-V-IV-IV-I-I-V-V)": [
             triads['V'],
             triads['V'],
             triads['IV'],
-            triads['I']
+            triads['IV'],
+            triads['I'],
+            triads['I'],
+            triads['V'],
+            triads['V'],
         ],
-        "Dream (vi V IV V)": [
+        "Dream (vi-V-IV-V)": [
             triads['vi'],
             triads['V'],
             triads['IV'],
             triads['V']
         ],
-        "Jazzy (ii V I Imaj7)": [
+        "Jazzy (ii-V-I-Imaj7)": [
             triads['ii'],
             triads['V'],
             triads['I'],
@@ -105,7 +109,7 @@ angular.module('starter.controllers', [])
     //Configurations
     $scope.selectedOctave = 3;
     $scope.selectedRange = 2;
-    $scope.selectedChordProg = $scope.chordProgs["Believing (I V vi IV)"];
+    $scope.selectedChordProg = $scope.chordProgs["Believing (I-V-vi-IV)"];
     $scope.selectedKey = $scope.keyValues["A"];
     $scope.waveform = $scope.waveforms["sine"];
     $scope.actualRange = $scope.selectedRange * 12;
