@@ -3,13 +3,13 @@
         <div id="myContainer">
 
             <div class="button-bar">
-                <button class="button button-balanced" ng-click="start()" ng-hide="isRunning">
+                <button class="button button-balanced" ng-click="vm.start()" ng-hide="vm.isRunning">
                     Start
                 </button>
-                <button class="button button-assertive" ng-click="end()" ng-show="isRunning">
+                <button class="button button-assertive" ng-click="vm.end()" ng-show="vm.isRunning">
                     Stop
                 </button>
-                <button class="button button-energized" ng-click="resetAll()">
+                <button class="button button-energized" ng-click="vm.resetAll()">
                     Reset
                 </button>
             </div>
@@ -19,35 +19,35 @@
                     <div class="input-label">
                         Key
                     </div>
-                    <select ng-model="$parent.selectedKey" ng-change="updateKey(selectedKey)" ng-options="value as key for (key , value) in keyValues"></select>
+                    <select ng-model="vm.selectedKey" ng-change="vm.restart()" ng-options="value as key for (key , value) in vm.keyValues"></select>
                 </label>
 
                 <label class="item item-input item-select">
                     <div class="input-label">
                         Progression
                     </div>
-                    <select ng-model="$parent.selectedChordProg" ng-change="updateChordProgression(selectedChordProg)" ng-options="value as key for (key , value) in chordProgs"></select>
+                    <select ng-model="vm.selectedChordProg" ng-change="vm.restart()" ng-options="value as key for (key , value) in vm.chordProgs"></select>
                 </label>
 
                 <label class="item item-input item-select">
                     <div class="input-label">
                         Waveform
                     </div>
-                    <select ng-model="$parent.waveform" ng-change="updateWaveform(waveform)" ng-options="value as key for (key , value) in waveforms"></select>
+                    <select ng-model="vm.waveform" ng-change="vm.restart()" ng-options="value as key for (key , value) in vm.waveforms"></select>
                 </label>
 
                 <label class="item item-input item-select">
                     <div class="input-label">
                         Octave
                     </div>
-                    <select ng-model="$parent.selectedOctave" ng-change="updateOctave(selectedOctave)" ng-options="value for value in octaves"></select>
+                    <select ng-model="vm.selectedOctave" ng-change="vm.restart()" ng-options="value for value in vm.octaves"></select>
                 </label>
 
                 <label class="item item-input item-select">
                     <div class="input-label">
                         Range
                     </div>
-                    <select ng-model="$parent.selectedRange" ng-change="updateRange(selectedRange)" ng-options="value for value in ranges"></select>
+                    <select ng-model="vm.selectedRange" ng-change="vm.restart()" ng-options="value for value in vm.ranges"></select>
                 </label>
 
                 <label class="item item-input-inset">
@@ -55,7 +55,7 @@
                         Tempo
                     </div>
                     <div class="item range range-positive tempoInputRange">
-                        <input type="range" name="tempo" min="40" max="160" ng-model="$parent.selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="updateTempo(selectedTempo)">
+                        <input type="range" name="tempo" min="40" max="160" ng-model="vm.selectedTempo" ng-model-options='{ debounce: 500 }' ng-change="vm.updateTempo()">
                     </div>
                 </label>
             </div>
@@ -64,20 +64,20 @@
                     <div class="input-label">
                         Visualization
                     </div>
-                    <select ng-model="$parent.visualSetting" ng-change="updateVisualization()">
+                    <select ng-model="vm.visualSetting" ng-change="vm.updateVisualization()">
                         <option>off</option>
                         <option>wave</option>
                         <option>bars</option>
                     </select>
                 </label>
-                <div ng-hide="visualSetting == 'off'">
+                <div ng-hide="vm.visualSetting == 'off'">
                     <canvas id="canv" width="512" height="128" style="width: 100%;"></canvas>
                     <ul class="list">
 
                         <li class="item item-toggle">
                             Melody
                             <label class="toggle toggle-assertive">
-                                <input type="checkbox" ng-model="$parent.visualizeMelody" ng-change="updateVisualizationMelody()">
+                                <input type="checkbox" ng-model="vm.visualizeMelody" ng-change="vm.updateVisualizationMelody()">
                                 <div class="track">
                                     <div class="handle"></div>
                                 </div>
@@ -87,7 +87,7 @@
                         <li class="item item-toggle">
                             Chord 1
                             <label class="toggle toggle-assertive">
-                                <input type="checkbox" ng-model="$parent.visualizeChor1" ng-change="updateVisualizationChor1()">
+                                <input type="checkbox" ng-model="vm.visualizeChor1" ng-change="vm.updateVisualizationChor1()">
                                 <div class="track">
                                     <div class="handle"></div>
                                 </div>
@@ -97,7 +97,7 @@
                         <li class="item item-toggle">
                             Chord 2
                             <label class="toggle toggle-assertive">
-                                <input type="checkbox" ng-model="$parent.visualizeChor2" ng-change="updateVisualizationChor2()">
+                                <input type="checkbox" ng-model="vm.visualizeChor2" ng-change="vm.updateVisualizationChor2()">
                                 <div class="track">
                                     <div class="handle"></div>
                                 </div>
@@ -107,7 +107,7 @@
                         <li class="item item-toggle">
                             Chord 3
                             <label class="toggle toggle-assertive">
-                                <input type="checkbox" ng-model="$parent.visualizeChor3" ng-change="updateVisualizationChor3()">
+                                <input type="checkbox" ng-model="vm.visualizeChor3" ng-change="vm.updateVisualizationChor3()">
                                 <div class="track">
                                     <div class="handle"></div>
                                 </div>

@@ -10,7 +10,10 @@ angular.module('starter.controllers', [])
     /*
     Used for buttons!
     */
-    $scope.keyValues = {
+
+    var vm = this;
+
+    vm.keyValues = {
         "C": 16.35,
         "C#/Db": 17.32,
         "D": 18.35,
@@ -25,7 +28,7 @@ angular.module('starter.controllers', [])
         "B": 30.87,
     }
     //this used to work differently. I am lazy.
-    $scope.waveforms = {
+    vm.waveforms = {
         "sine": "sine",
         "square": "square",
         "sawtooth": "sawtooth",
@@ -43,7 +46,7 @@ angular.module('starter.controllers', [])
         'Imaj7': [0, 4, 11],
     }
 
-    $scope.chordProgs = {
+    vm.chordProgs = {
         "Believing (I-V-vi-IV)": [
             triads['I'],
             triads['V'],
@@ -103,22 +106,22 @@ angular.module('starter.controllers', [])
 
     };
 
-    $scope.octaves = [0, 1, 2, 3, 4, 5];
-    $scope.ranges = [1, 2, 3, 4];
+    vm.octaves = [0, 1, 2, 3, 4, 5];
+    vm.ranges = [1, 2, 3, 4];
 
     //Configurations
-    $scope.selectedOctave = 3;
-    $scope.selectedRange = 2;
-    $scope.selectedChordProg = $scope.chordProgs["Believing (I-V-vi-IV)"];
-    $scope.selectedKey = $scope.keyValues["A"];
-    $scope.waveform = $scope.waveforms["sine"];
-    $scope.actualRange = $scope.selectedRange * 12;
-    $scope.selectedTempo = 100;
+    vm.selectedOctave = 3;
+    vm.selectedRange = 2;
+    vm.selectedChordProg = vm.chordProgs["Believing (I-V-vi-IV)"];
+    vm.selectedKey = vm.keyValues["A"];
+    vm.waveform = vm.waveforms["sine"];
+    vm.actualRange = vm.selectedRange * 12;
+    vm.selectedTempo = 100;
 
-    $scope.visualizeChor1 = false;
-    $scope.visualizeChor2 = false;
-    $scope.visualizeChor3 = false;
-    $scope.visualizeMelody = true;
+    vm.visualizeChor1 = false;
+    vm.visualizeChor2 = false;
+    vm.visualizeChor3 = false;
+    vm.visualizeMelody = true;
 
     var base;
     //used with calculating notes
@@ -133,7 +136,7 @@ angular.module('starter.controllers', [])
     var time;
     var melodyInt;
     var chor1, chor2, chor3, melody, chordGain, melodyGain;
-    $scope.isRunning = false;
+    vm.isRunning = false;
 
     //All browsers, hooray
     try {
@@ -143,7 +146,7 @@ angular.module('starter.controllers', [])
     }
 
 
-    $scope.visualSetting = "off";
+    vm.visualSetting = "off";
 
     var analyser = context.createAnalyser();
 
@@ -154,7 +157,7 @@ angular.module('starter.controllers', [])
         var canvasWidth = canvas.width;
         var canvasHeight = canvas.height;
         
-        var visualSetting = $scope.visualSetting;
+        var visualSetting = vm.visualSetting;
 
         console.log(visualSetting);
 
@@ -283,10 +286,10 @@ angular.module('starter.controllers', [])
         //chor1.connect(analyser);
         //chor2.connect(analyser);
         //chor3.connect(analyser);
-        connectOrDisconnect(melody, $scope.visualizeMelody, true);
-        connectOrDisconnect(chor1, $scope.visualizeChor1, true);
-        connectOrDisconnect(chor2, $scope.visualizeChor2, true);
-        connectOrDisconnect(chor3, $scope.visualizeChor3, true);
+        connectOrDisconnect(melody, vm.visualizeMelody, true);
+        connectOrDisconnect(chor1, vm.visualizeChor1, true);
+        connectOrDisconnect(chor2, vm.visualizeChor2, true);
+        connectOrDisconnect(chor3, vm.visualizeChor3, true);
 
         //Set type of wave for chord
         chor1.type = chordType;
@@ -298,9 +301,10 @@ angular.module('starter.controllers', [])
 
         melody.frequency.value = base;
 
-        var prog = $scope.selectedChordProg;
+        var prog = vm.selectedChordProg;
 
-        var ar = $scope.actualRange;
+        vm.actualRange = vm.selectedRange * 12;
+        var ar = notes.length;
         chor1.frequency.value = notes[prog[0][0] % ar];
         chor2.frequency.value = notes[prog[0][1] % ar];
         chor3.frequency.value = notes[prog[0][2] % ar];
@@ -311,7 +315,7 @@ angular.module('starter.controllers', [])
         notes = [];
         var freq = base;
         var step = 0;
-        for (var i = 0; i < $scope.actualRange; i++) {
+        for (var i = 0; i < vm.actualRange; i++) {
             notes[i] = freq;
             step++;
             //if (i % 7 != 2 && i % 7 != 6) {
@@ -330,27 +334,28 @@ angular.module('starter.controllers', [])
 
     //melody function
     var melodyFun = function () {
-        var prog = $scope.selectedChordProg;
+        var prog = vm.selectedChordProg;
         time++;
+        var ar = notes.length;
         //chord progression    
         if (time % (notesPerMeasure * (qtrNote / minNote)) == 0 && time != 0) {
             chord++;
             chord %= prog.length;
-            chor1.frequency.value = notes[prog[chord][0] % $scope.actualRange];
+            chor1.frequency.value = notes[prog[chord][0] % ar];
 
             sus = getRandomBool();
 
             if (sus) {
                 changeSusOn = time + getRandomInt(1,4);
             } else {
-                chor2.frequency.value = notes[prog[chord][1] % $scope.actualRange];
+                chor2.frequency.value = notes[prog[chord][1] % ar];
                 changeSusOn = 0;
             }
-            chor3.frequency.value = notes[prog[chord][2] % $scope.actualRange];
+            chor3.frequency.value = notes[prog[chord][2] % ar];
            
         } else if(sus && (changeSusOn == time)) {
             if (sus) {
-                chor2.frequency.value = notes[prog[chord][1] % $scope.actualRange];
+                chor2.frequency.value = notes[prog[chord][1] % ar];
 
                 sus = false;
                 changeSusOn = 0;
@@ -359,7 +364,7 @@ angular.module('starter.controllers', [])
         //Random note length
         if (time % (Math.floor(Math.random() * (qtrNote / minNote))) == 0) {
             //random note 0 to range-1
-            var note = Math.floor((Math.random() * ($scope.actualRange - 1)));
+            var note = Math.floor((Math.random() * (ar - 1)));
 
             // if we hit an off-note, pick one of the notes in the current chord
             if (playInKey) {
@@ -371,7 +376,7 @@ angular.module('starter.controllers', [])
                 else if (noteMod === 10) note = prog[chord][2];
             }
 
-            freq = notes[note % $scope.actualRange];
+            freq = notes[note % ar];
 
             melody.frequency.value = freq;
         }
@@ -386,7 +391,7 @@ angular.module('starter.controllers', [])
     }
 
     var beginFunc = function () {
-        if (!$scope.isRunning) {
+        if (!vm.isRunning) {
             init();
             chord = 0;
             step = 0;
@@ -398,7 +403,7 @@ angular.module('starter.controllers', [])
             chor2.start(0);
             chor3.start(0);
 
-            $scope.isRunning = true;
+            vm.isRunning = true;
         } else {
             endFunc();
             beginFunc();
@@ -407,87 +412,61 @@ angular.module('starter.controllers', [])
 
     // Click to end the madness
     var endFunc = function () {
-        if ($scope.isRunning) {
+        if (vm.isRunning) {
             chor1.stop(0);
             chor2.stop(0);
             chor3.stop(0);
             melody.stop(0);
             clearInterval(melodyInt);
-            $scope.isRunning = false;
+            vm.isRunning = false;
         }
     }
 
     var updateBase = function () {
-        base = $scope.selectedKey * Math.pow(2, $scope.selectedOctave);
+        base = vm.selectedKey * Math.pow(2, vm.selectedOctave);
     }
     var updateWaveformType = function () {
-        chordType = $scope.waveform;
-        melodyType = $scope.waveform;
+        chordType = vm.waveform;
+        melodyType = vm.waveform;
     }
 
     function restart() {
-        if ($scope.isRunning) {
+        if (vm.isRunning) {
             endFunc();
             beginFunc();
         }
     }
 
-    $scope.start = function () { beginFunc(); };
-    $scope.end = function () { endFunc(); };
+    vm.restart = restart;
+        vm.start = beginFunc;
+    vm.end =  endFunc;
 
-    $scope.updateKey = function (newKey) {
-        //hack - select isn't updating the selectedKey via ng-model.  Have to manually set it here
-        $scope.selectedKey = newKey;
-        restart();
-    }
-
-    $scope.updateChordProgression = function (newProg) {
-        //hack - select isn't updating the selectedKey via ng-model.  Have to manually set it here
-        $scope.selectedChordProg = newProg;
-        restart();
-    }
-
-    $scope.updateOctave = function (newOctave) {
-        $scope.selectedOctave = newOctave;
-        restart();
-    }
-
-    $scope.updateRange = function (newRange) {
-        $scope.seleectedRange = newRange;
-        $scope.actualRange = newRange * 12;
-        restart();
-    }
-
-    $scope.updateTempo = function (newTempo) {
+    vm.updateTempo = function () {
         //  checkBpmInput(newTempo);
-        qtrNote = Math.floor(Math.pow(newTempo / 60 / 1000, -1));
+        qtrNote = Math.floor(Math.pow(vm.selectedTempo / 60 / 1000, -1));
         eigthNote = qtrNote / 2;
         minNote = eigthNote;
         restart();
     }
-    $scope.updateWaveform = function (newWaveform) {
-        $scope.waveform = newWaveform;
-        restart();
-    }
 
-    $scope.updateVisualization = function () {
+    vm.updateVisualization = function () {
         if (drawVisual)
             window.cancelAnimationFrame(drawVisual);
 
         visualize();
     }
     
-    $scope.updateVisualizationMelody = function () {
-        connectOrDisconnect(melody, $scope.visualizeMelody);
+    vm.updateVisualizationMelody = function () {
+        connectOrDisconnect(melody, vm.visualizeMelody);
     }
-    $scope.updateVisualizationChor1 = function () {
-        connectOrDisconnect(chor1, $scope.visualizeChor1);
+    vm.updateVisualizationChor1 = function () {
+        connectOrDisconnect(chor1, vm.visualizeChor1);
     }
-    $scope.updateVisualizationChor2 = function () {
-        connectOrDisconnect(chor2, $scope.visualizeChor2);
+    vm.updateVisualizationChor2 = function () {
+        connectOrDisconnect(chor2, vm.visualizeChor2);
     }
-    $scope.updateVisualizationChor3 = function () {
-        connectOrDisconnect(chor3, $scope.visualizeChor3);
+    vm.updateVisualizationChor3 = function () {
+        connectOrDisconnect(chor3, vm.visualizeChor3);
     }
 
     function connectOrDisconnect(osc, con, init) {
@@ -500,21 +479,21 @@ angular.module('starter.controllers', [])
         }
     }
 
-    $scope.resetAll = function () {
-        $scope.selectedRange = 2;
-        $scope.selectedKey = $scope.keyValues["A"];
-        $scope.waveform = $scope.waveforms["sine"];
-        $scope.selectedOctave = 3;
-        $scope.actualRange = $scope.selectedRange * 12;
-        $scope.selectedTempo = 100;
-        $scope.updateTempo($scope.selectedTempo);
+    vm.resetAll = function () {
+        vm.selectedRange = 2;
+        vm.selectedKey = vm.keyValues["A"];
+        vm.waveform = vm.waveforms["sine"];
+        vm.selectedOctave = 3;
+        vm.actualRange = vm.selectedRange * 12;
+        vm.selectedTempo = 100;
+        vm.updateTempo(vm.selectedTempo);
 
-        $scope.visualSetting = 'off';
-        $scope.updateVisualization();
-        $scope.visualizeChor1 = false;
-        $scope.visualizeChor2 = false;
-        $scope.visualizeChor3 = false;
-        $scope.visualizeMelody = true;
+        vm.visualSetting = 'off';
+        vm.updateVisualization();
+        vm.visualizeChor1 = false;
+        vm.visualizeChor2 = false;
+        vm.visualizeChor3 = false;
+        vm.visualizeMelody = true;
 
         restart();
     }
