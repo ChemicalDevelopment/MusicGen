@@ -44,13 +44,13 @@ angular.module('starter.controllers', [])
     }
 
     $scope.chordProgs = {
-        "Don't Stop Believing (I V vi IV)": [
+        "Believing (I V vi IV)": [
             triads['I'],
             triads['V'],
             triads['vi'],
             triads['IV']
         ],
-        'My Sweet Annette (ii IV I V)': [
+        'Annette (ii IV I V)': [
             triads['ii'],
             triads['IV'],
             triads['I'],
@@ -84,13 +84,13 @@ angular.module('starter.controllers', [])
             triads['IV'],
             triads['I']
         ],
-        "Dream On (vi V IV V)": [
+        "Dream (vi V IV V)": [
             triads['vi'],
             triads['V'],
             triads['IV'],
             triads['V']
         ],
-        "Jazz (ii V I Imaj7)": [
+        "Jazzy (ii V I Imaj7)": [
             triads['ii'],
             triads['V'],
             triads['I'],
@@ -105,7 +105,7 @@ angular.module('starter.controllers', [])
     //Configurations
     $scope.selectedOctave = 3;
     $scope.selectedRange = 2;
-    $scope.selectedChordProg = $scope.chordProgs["Don't Stop Believing (I V vi IV)"];
+    $scope.selectedChordProg = $scope.chordProgs["Believing (I V vi IV)"];
     $scope.selectedKey = $scope.keyValues["A"];
     $scope.waveform = $scope.waveforms["sine"];
     $scope.actualRange = $scope.selectedRange * 12;
