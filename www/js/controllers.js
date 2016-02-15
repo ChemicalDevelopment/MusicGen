@@ -339,40 +339,19 @@ angular.module('starter.controllers', [])
             //random note 0 to range-1
             var note = Math.floor((Math.random() * ($scope.actualRange - 1)));
 
+            // if we hit an off-note, pick one of the notes in the current chord
             if (playInKey) {
                 var noteMod = note % 12;
-                if (noteMod === 1) {
-                    note--;
-                  //  rest = true;
-                }
-                else if (noteMod === 3) note++;
-                else if (noteMod === 6) note--;
-                else if (noteMod === 8) note++;
-                else if (noteMod === 10) note--;
+                if (noteMod === 1) note = prog[chord][0];
+                else if (noteMod === 3) note = prog[chord][1];
+                else if (noteMod === 6) note = prog[chord][1];
+                else if (noteMod === 8) note = prog[chord][2];
+                else if (noteMod === 10) note = prog[chord][2];
             }
-            //freq = rest ? 0 : notes[note];
+
             freq = notes[note];
 
-            //if (rest) {
-            //    melody.noteOff(0);
-            //} else {
-            //    melody.noteOn(0);
-            //}
-
-            //attack = 20;
-            //decay = 100;
-
-            //if (rest) {
-            //    melodyGain.gain.linearRampToValueAtTime(0, context.currentTime + decay/1000);
-            //} else if(restLastTime)
-            //    melodyGain.gain.linearRampToValueAtTime(0.1, context.currentTime + attack/1000);
-
-            //restLastTime = rest;
-            //rest = false;
-
-
             melody.frequency.value = freq;
-
         }
     }
 
