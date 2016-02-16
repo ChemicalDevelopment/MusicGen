@@ -481,6 +481,7 @@ angular.module('starter.controllers', [])
 
     vm.resetAll = function () {
         vm.selectedRange = 2;
+        vm.selectedChordProg = vm.chordProgs["Believing (I-V-vi-IV)"];
         vm.selectedKey = vm.keyValues["A"];
         vm.waveform = vm.waveforms["sine"];
         vm.selectedOctave = 3;
