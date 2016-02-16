@@ -50,6 +50,16 @@
                     <select ng-model="vm.selectedRange" ng-change="vm.restart()" ng-options="value for value in vm.ranges"></select>
                 </label>
 
+                <li class="item item-toggle">
+                    Suspended Chords
+                    <label class="toggle toggle-assertive">
+                        <input type="checkbox" ng-model="vm.suspendedChords">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </li>
+
                 <label class="item item-input-inset">
                     <div class="input-label">
                         Tempo

@@ -343,14 +343,20 @@ angular.module('starter.controllers', [])
             chord %= prog.length;
             chor1.frequency.value = notes[prog[chord][0] % ar];
 
-            sus = getRandomBool();
+            // if suspended chords is enabled, do some randomization of the middle voice
+            if (vm.suspendedChords) {
+                sus = getRandomBool();
 
-            if (sus) {
-                changeSusOn = time + getRandomInt(1,4);
+                if (sus) {
+                    changeSusOn = time + getRandomInt(1, 4);
+                } else {
+                    chor2.frequency.value = notes[prog[chord][1] % ar];
+                    changeSusOn = 0;
+                }
             } else {
                 chor2.frequency.value = notes[prog[chord][1] % ar];
-                changeSusOn = 0;
             }
+
             chor3.frequency.value = notes[prog[chord][2] % ar];
            
         } else if(sus && (changeSusOn == time)) {
@@ -486,6 +492,7 @@ angular.module('starter.controllers', [])
         vm.waveform = vm.waveforms["sine"];
         vm.selectedOctave = 3;
         vm.actualRange = vm.selectedRange * 12;
+        vm.suspendedChords = false;
         vm.selectedTempo = 100;
         vm.updateTempo(vm.selectedTempo);
 
