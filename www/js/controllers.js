@@ -59,6 +59,12 @@ angular.module('starter.controllers', [])
             triads['I'],
             triads['V']
         ],
+        "Flaws (IV-I-V-ii)": [
+            triads['IV'],
+            triads['I'],
+            triads['V'],
+            triads['ii']
+        ],
         "50's (I-vi-IV-V)": [
             triads['I'],
             triads['vi'],
@@ -272,8 +278,6 @@ angular.module('starter.controllers', [])
         chor3 = context.createOscillator();
         melody = context.createOscillator();
 
-
-
         chor1.connect(chordGain);
         chor2.connect(chordGain);
         chor3.connect(chordGain);
@@ -299,12 +303,11 @@ angular.module('starter.controllers', [])
         //Set type of wave for melody
         melody.type = melodyType;
 
-        melody.frequency.value = base;
-
         var prog = vm.selectedChordProg;
 
         vm.actualRange = vm.selectedRange * 12;
         var ar = notes.length;
+        melody.frequency.value = notes[prog[0][0] % ar];
         chor1.frequency.value = notes[prog[0][0] % ar];
         chor2.frequency.value = notes[prog[0][1] % ar];
         chor3.frequency.value = notes[prog[0][2] % ar];
