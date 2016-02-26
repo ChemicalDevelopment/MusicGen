@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'admobModule', 'starter.controllers'])
 
 .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -19,9 +19,44 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+
     });
 })
+.config(['admobSvcProvider', function (admobSvcProvider) {
+    // Optionally you can configure the options here:
+    admobSvcProvider.setOptions({
+        publisherId:          "pub-8921580138781833",  // Required
+        //interstitialAdId:     "ca-app-pub-XXXXXXXXXXXXXXXX/IIIIIIIIII",  // Optional
+        //tappxIdiOs:           "/XXXXXXXXX/Pub-XXXX-iOS-IIII",            // Optional
+        //tappxIdAndroid:       "ca-app-pub-8921580138781833/4490251191",        // Optional
+        //tappxShare:           0.5                                        // Optional
 
+        //adSize:               admob.AD_SIZE.SMART_BANNER,
+        bannerAtTop:          false,
+        overlap:              false,
+        offsetStatusBar:      false,
+        isTesting:            false,
+        adExtras :            {},
+        autoShowBanner:       true,
+        autoShowInterstitial: true
+    });
+
+    // Optionally configure the events prefix (by default set to 'admob:')
+    admobSvcProvider.setPrefix('myTag~');
+}])
+.run(['admobSvc', '$rootScope', function (admobSvc, $rootScope) {
+    // Also you could configure the options here (or in any controller):
+    // admobSvcProvider.setOptions({ ... });
+
+    admobSvc.createBannerView();
+    // You could also call admobSvc.createBannerView(options);
+
+
+    // Handle events:
+    $rootScope.$on(admobSvc.events.onAdOpened, function onAdOpened(evt, e) {
+        console.log('adOpened: type of ad:' + e.adType);
+    });
+}])
 .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('app', {
